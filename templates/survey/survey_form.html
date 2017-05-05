@@ -4,12 +4,14 @@
 
 <form action="{% url 'survey:submit' %}" method="post">
 {% csrf_token %}
-{% for question in survey.question_set.all %}
+{% for question in survey.questions %}
     <p>{{ question.text }}</p>
     {% for choice in question.choices %}
         <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
         <label for="choice{{ forloop.counter }}">{{ choice.text_value }}</label><br />
     {% endfor %}
 {% endfor %}
+
+
 <input type="submit" value="Submit" />
 </form>

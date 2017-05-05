@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.template import loader
+from django.core.mail import send_mail
 
 from .models import Survey, Question, ChoiceGroup
 
@@ -12,6 +13,13 @@ def submit(request):
     context = {
         'username': 'user',
     }
+    send_mail(
+        'subject here',
+        'message',
+        'mujdasaood@gmail.com',
+        ['mujdasaood@gmail.com'],
+        fail_silently=False,
+    )
     return render(request, 'survey/submit.html', context)
 
 

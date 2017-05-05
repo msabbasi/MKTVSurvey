@@ -9,6 +9,10 @@ from django.utils import timezone
 class Survey(models.Model):
     name = models.CharField(max_length=50)
 
+    @property
+    def questions(self):
+        return Question.objects.filter(survey = self.pk)
+
     def __str__(self):
         return self.name
 
