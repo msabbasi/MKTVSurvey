@@ -8,6 +8,9 @@ from django.utils import timezone
 
 class Survey(models.Model):
     name = models.CharField(max_length=50)
+    #header_image_url = 
+    #page_title = models.CharField(max_length=50)
+    #description = models.CharField(max_length=200)
 
     @property
     def questions(self):
@@ -33,6 +36,16 @@ class Choice(models.Model):
     choice_group = models.ForeignKey(ChoiceGroup, on_delete=models.CASCADE)
     text_value = models.CharField(max_length=200)
     numeric_value = models.IntegerField(null=True, blank=True)
+    
+    OTHER = -1
+    NORMAL = 0
+
+    Type = (
+        (OTHER, 'other'),
+        (NORMAL, 'normal'),
+    )
+
+    choice_type = models.IntegerField(choices=Type, default=NORMAL)
 
     def __str__(self):
         return self.text_value
@@ -42,6 +55,16 @@ class Question(models.Model):
     choice_group = models.ForeignKey(ChoiceGroup, on_delete=models.SET_NULL, null=True)
     required = models.BooleanField()
     text = models.CharField(max_length=200)
+
+    RADIO = -1
+    CHECKBOX = 0
+
+    Type = (
+        (RADIO, 'radio'),
+        (CHECKBOX, 'checkbox'),
+    )
+
+    options_type = models.IntegerField(choices=Type, default=RADIO)
 
     @property
     def choices(self):

@@ -1,17 +1,34 @@
-<h1>{{ survey.name }}</h1>
+{% load static %}
 
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<head>
+    <link rel="stylesheet" href="{% static 'survey/styles.css' %}">
+</head>
 
-<form action="{% url 'survey:submit' %}" method="post">
-{% csrf_token %}
-{% for question in survey.questions %}
-    <p>{{ question.text }}</p>
-    {% for choice in question.choices %}
-        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
-        <label for="choice{{ forloop.counter }}">{{ choice.text_value }}</label><br />
-    {% endfor %}
-{% endfor %}
+<section class="wrap-notification">
+    <div class="container">
+        <div class="title-block with-hand green"><span>{{ survey.name }}</span></div>
+        <div class="wrap-form type-paper">
 
+            {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-<input type="submit" value="Submit" />
-</form>
+            <form action="{% url 'survey:submit' %}?SurveyID={{survey.id}}&username={{username}}" method="post">
+            {% csrf_token %}
+            {% for question in survey.questions %}
+                <p>{{ question.text }}</p>
+                {% if question.options_type == question.RADIO %}
+                    {% for choice in question.choices %}
+                        {% if choice.choice_type == choice.NORMAL %}
+                            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
+                            <label for="choice{{ forloop.counter }}">{{ choice.text_value }}</label><br />
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+                <div class="wrap-btn-submit">
+                    <button type="submit" class="btn btn-contest">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
