@@ -12,18 +12,39 @@
             {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
             <form action="{% url 'survey:submit' %}?SurveyID={{survey.id}}&username={{username}}" method="post">
-            {% csrf_token %}
-            {% for question in survey.questions %}
-                <p>{{ question.text }}</p>
-                {% if question.options_type == question.RADIO %}
-                    {% for choice in question.choices %}
-                        {% if choice.choice_type == choice.NORMAL %}
-                            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
-                            <label for="choice{{ forloop.counter }}">{{ choice.text_value }}</label><br />
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
+                {% csrf_token %}
+                {% for question in survey.questions %}
+                    <p>{{ question.text }}</p>
+                    
+                    
+                    {% if question.input_type == question.SLIDER %}
+                            <input type="range" name="{{ question.id }}" min="{{ question.min_value }}" max="{{ question.max_value }}" step="1" value="{{ question.min_value }}" onchange="showValue(this.value)" />
+                            <span id="range">{{ question.min_value }}</span>
+                            <script type="text/javascript">
+                            function showValue(newValue)
+                            {
+	                            document.getElementById("range").innerHTML=newValue;
+                            }
+                            </script>
+                            
+
+                        
+                    {% elif question.input_type == question.DROPDOWN %}
+                        <select name="{{ question.id }}">
+                        {% for choice in question.choices %}
+                            <option value="{{ choice.id }}">{{ choice.text_value }}</option>
+                        {% endfor %}
+                        </select>                    
+                    {% else %}
+                        {% for choice in question.choices %}
+                            {% if choice.choice_type == choice.NORMAL %}
+                                <input type="{{question.get_input_type_display}}" name="{{ question.id }}" id="question{{ forloop.parentloop.counter }}choice{{ choice.id }}" value="{{ choice.id }}" />
+                                <label for="choice{{ forloop.counter }}">{{ choice.text_value }}</label><br />
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    
+                {% endfor %}
                 <div class="wrap-btn-submit">
                     <button type="submit" class="btn btn-contest">Submit</button>
                 </div>

@@ -20,10 +20,10 @@ def submit(request):
 
     questions = survey.questions
 
-    for q in questions:
-        selected_choice = q.choices.get(pk=request.POST['choice'])
+    #for q in questions:
+        #selected_choice = q.choices.get(pk=request.POST['choice'])
 
-    print(request.POST['choice'])
+    print(request.POST)
     
     #send_mail(
     #    'subject here',
