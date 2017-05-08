@@ -98,7 +98,7 @@ class Question(models.Model):
 
 class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.PROTECT)
-    submission = models.ForeignKey(Survey, on_delete=models.CASCADE)
+    submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
     choice = models.ForeignKey(Choice, on_delete=models.PROTECT, null=True)
     text = models.CharField(max_length=200, null=True, blank=True)
     other_text = models.CharField(max_length=200, null=True, blank=True)
