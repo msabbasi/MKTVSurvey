@@ -1,66 +1,80 @@
 {% load static %}
 
 <head>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>{{ survey.name }}</title>
 
-    <link rel="stylesheet" href="{% static 'bootstrap/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'survey/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'survey/css/style.css' %}">
+    
+
+    <script type="text/javascript" src="{% static 'survey/js/jquery-2.0.3.min.js' %}"></script>    
+    <script type="text/javascript" src="{% static 'survey/js/survey.js' %}"></script>
+    <script src="{% static 'survey/js/jquery.icheck.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 </head>
 
 <body>
-    <section class="wrap-notification">
+    <section class="wrap-survey">
         <div class="container">
-            <div class="title-block with-hand green"><span>{{ survey.page_title }}</span></div>
+            <div class="title-block with-hand green">
+                <span>{{ survey.page_title }}</span>
+            </div>
 
-                {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+            {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-                <form action="{% url 'survey:submit' %}" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="survey_id" value="{{ survey.id }}">
-                    <input type="hidden" name="username" value="{{ username }}">
+            <form action="{% url 'survey:submit' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="survey_id" value="{{ survey.id }}">
+                <input type="hidden" name="username" value="{{ username }}">
+                
+                
+                <div class="wrap-form purple light-form">
+                
+                <div class="title">{{ survey.description }}</div>
+                
+                {% for question in survey.questions %}
+                    <div class="wrap-survey-question">
+                    
+                    <p>{{ question.text }}</p>
                     
                     
-                    <div class="wrap-form type-paper">
-                    
-                    {% for question in survey.questions %}
-                        <p>{{ question.text }}</p>
+                    {% if question.input_type == question.SLIDER %}
+                            <span id="slider-{{ question.id }}-value"></span>
+                            <input type="range" id="slider-{{ question.id }}" name="{{ question.id }}" min="{{ question.min_value }}" max="{{ question.max_value }}" step="1" value="" onchange="showSliderValue(this.value, this.id+'-value')" />
+                            
+                    {% elif question.input_type == question.DROPDOWN %}
+                    {% comment %}
+                        <div class="wrap-dropdown-select">
+                            <div class="btn-group dropdown-group dropdown-select">
+                    {% endcomment %}
+                                <select name="{{ question.id }}">
+                                {% for choice in question.choices %}
+                                    <option value="{{ choice.id }}">{{ choice.text_value }}</option>
+                                {% endfor %}
+                                </select>
                         
-                        
-                        {% if question.input_type == question.SLIDER %}
-                                <input type="range" name="{{ question.id }}" min="{{ question.min_value }}" max="{{ question.max_value }}" step="1" value="{{ question.min_value }}" onchange="showValue(this.value)" />
-                                <span id="range">{{ question.min_value }}</span>
-                                <script type="text/javascript">
-                                function showValue(newValue)
-                                {
-	                                document.getElementById("range").innerHTML=newValue;
-                                }
-                                </script>              
-                        {% elif question.input_type == question.DROPDOWN %}
-                            <div class="wrap-dropdown-select">
-                                <div class="class="btn-group dropdown-group dropdown-select">
-                                    <select name="{{ question.id }}">
-                                    {% for choice in question.choices %}
-                                        <option value="{{ choice.id }}">{{ choice.text_value }}</option>
-                                    {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                        {% else %}
+                    {% else %}
                             {% for choice in question.choices %}
                                 {% if choice.choice_type == choice.NORMAL %}
                                     <input type="{{question.get_input_type_display}}" name="{{ question.id }}" id="question{{ forloop.parentloop.counter }}choice{{ choice.id }}" value="{{ choice.id }}" />
-                                    <label class="wrap-{{question.get_input_type_display}}" for="choice{{ forloop.counter }}">{{ choice.text_value }}</label><br />
+                                    <label for="choice{{ forloop.counter }}">{{ choice.text_value }}</label><br />
                                 {% endif %}
                             {% endfor %}
-                        {% endif %}
-                        
-                    {% endfor %}
-                    </div>
+                    {% endif %}
                     
-                    <div class="wrap-btn-submit">
-                        <button type="submit" class="btn btn-contest">Submit</button>
                     </div>
-                </form>
+                {% endfor %}
+                
+                </div>
+                
+                <div class="wrap-btn-submit">
+                    <button type="submit" class="btn btn-survey-submit">Submit</button>
+                </div>
+            </form>
             
         </div>
     </section>

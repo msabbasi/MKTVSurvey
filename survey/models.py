@@ -8,7 +8,8 @@ from django.core.exceptions import ValidationError
 # Create your models here.
 
 class Survey(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
+    #TODO: Custom header image
     #header_image_url = 
     page_title = models.CharField(max_length=50)
     description = models.CharField(max_length=200)

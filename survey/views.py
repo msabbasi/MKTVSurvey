@@ -51,6 +51,8 @@ def submit(request):
 
     print(request.POST)
     
+    #TODO: Nice string to send in email
+
     #send_mail(
     #    'subject here',
     #    'message',
