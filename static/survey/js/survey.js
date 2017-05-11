@@ -90,9 +90,14 @@ $(document).on("click", ".btn-survey-submit", function (evt) {
         if (question.find('.question-required').length) {
             if (question.find('.wrap-multiple-options').length) {
                 if (question.find('input:checked').length < 1) {
-                    $('html, body').animate({ scrollTop: question.offset().top }, 'slow');
-                    //question.css('outline', 'none !important').attr("tabindex",-1).focus();
                     evt.preventDefault();
+                    $('html, body').animate({ scrollTop: question.offset().top }, 'slow');
+                    question.find('.question-required').delay(1000).hide(0).delay(500).show(0).delay(500).hide(0).delay(500).show(0);
+                    //question.addClass('blink').delay(2000).removeClass('blink');
+                    //question.effect("highlight", {}, 3000);
+                    //var originalBg = $(this).css("backgroundColor");
+                    //question.stop().css("background-color", "#FFFF9C").animate({ backgroundColor: originalBg}, 1500);
+                    //question.css('outline', 'none !important').attr("tabindex",-1).focus();
                 }
             }
         }

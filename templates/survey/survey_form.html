@@ -26,7 +26,7 @@
 
             {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-            <form id= "survey-form" action="{% url 'survey:submit' %}" method="post">
+            <form id= "survey-form" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="survey_id" value="{{ survey.id }}">
                 <input type="hidden" name="username" value="{{ username }}">
@@ -47,7 +47,7 @@
                             
                             {% if question.input_type == question.SLIDER %}
                                 <div class="wrap-survey-slider">
-                                    <div class="slider-value" id="slider-{{ question.id }}-value">Slide to choose</div>
+                                    <div class="slider-value" id="slider-{{ question.id }}-value"></div>
                                     <input class="survey-slider" type="range" id="slider-{{ question.id }}" name="{{ question.id }}" min="{{ question.min_value }}" max="{{ question.max_value }}" step="1" value="" oninput="showSliderValue(this.value, this.id+'-value')"/>
                                 </div>
                                     
@@ -94,9 +94,6 @@
                     </div>
                 
                 </div>
-                
-
-                
             </form>
         </div>
     </section>

@@ -1,1 +1,28 @@
-<p>Thanks, {{ username }}!</p>
+{% load static %}
+
+<head>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ survey.name }}</title>
+
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'survey/css/style.css' %}">
+    
+
+    <script type="text/javascript" src="{% static 'survey/js/jquery-2.0.3.min.js' %}"></script> 
+    <script src="{% static 'survey/js/jquery.icheck.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>   
+    <script type="text/javascript" src="{% static 'survey/js/survey.js' %}"></script>
+</head>
+
+<body>
+    <section class="wrap-message-screen">
+        <div class="container">
+            <div class="wrap-message purple">
+                <h1>{{ message }}</h1>
+            </div>
+        </div>
+    </section>
+</body>

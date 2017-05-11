@@ -300,10 +300,13 @@
 /* wrap survey question */
 .wrap-survey-question {
   padding: 50px 0 0 0;
+  -webkit-transition: backgroundColor 0.05s ease-in-out;
+  -ms-transition:     backgroundColor 0.05s ease-in-out;
+  transition:         backgroundColor 0.05s ease-in-out;
 }
 .wrap-survey-question p {
   color: white;
-  font-size: 24px;
+  font-size: 30px;
   display: inline-block;
 }
 .question-required {
@@ -314,6 +317,36 @@
   color: white;
   font-size: 24px;
 }
+.wrap-survey-question.blink {
+  background: orangered;
+}
+
+/* Wrap message */
+.wrap-message-screen {
+  background: #49c2c5;
+  height:100%;
+  width:100%;
+  padding: 5%;
+  box-sizing:border-box;
+  text-align: center;
+}
+.wrap-message.purple {
+  background: url("../img/form-bg-purple-large.png") no-repeat;
+  background-size: 100% 100%;
+  max-width: 800px;
+  max-height: 200px;
+  min-height: 300px;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  padding: 25% 25%;
+}
+.wrap-message.purple h1 {
+  color: white;
+  font-size: 50px;
+  font-family: 'gooddog_plainregular';
+  text-align: center;
+}
 
 
 /* slider */
@@ -322,7 +355,7 @@
 }
 
 .slider-value {
-  font-size: 25px;
+  font-size: 30px;
   color: orange;
   width: 100%;
   line-height: 1px;
@@ -492,6 +525,10 @@
 */
 
 /* Dropdown */
+.wrap-survey select {
+  color: orange;
+}
+
 .dropdown-select {
   display: table;
   width: 100%;
