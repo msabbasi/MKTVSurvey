@@ -23,39 +23,66 @@ def submit(request):
                 username = username)
     submission.save()
 
+    submission_str = ""
+
     questions = survey.questions
     for q in questions:
-        choice = None
-        text = None
-        other_text = None
-        range_value = None
+
+        submission_str += q.text+"\n"
 
         if q.input_type == q.SLIDER:
             range_value = int(request.POST[str(q.id)])
             a = Answer(submission=submission, question=q, range_value=range_value)
             a.save()
-        elif q.input_type in (q.RADIO, q.DROPDOWN):
+            submission_str += str(range_value)+"\n"
+        elif q.input_type == q.DROPDOWN:
             choice = q.choices.get(pk=request.POST[str(q.id)])
             a = Answer(submission=submission, question=q, choice=choice)
             a.save()
-        elif q.input_type == q.CHECKBOX:
-            checked = request.POST[str(q.id)]
-            for each in checked:
-                choice = q.choices.get(pk=each)
+            submission_str += choice.text_value+"\n"
+        elif q.input_type == q.RADIO:
+            try:
+                choice = q.choices.get(pk=request.POST[q.id])
                 a = Answer(submission=submission, question=q, choice=choice)
+                if choice.choice_type == choice.OTHER:
+                    other_text = request.POST[str(q.id)+"-other"]
+                    a.other_text=other_text
+                    submission_str += other_text+"\n"
+                    #TODO: check if other text is filled
+                else:
+                    submission_str += choice.text_value+"\n"
                 a.save()
+            except:
+                submission_str += "-\n"
+        elif q.input_type == q.CHECKBOX:
+            try:
+                checked = request.POST.getlist(str(q.id))
+                for each in checked:
+                    choice = q.choices.get(pk=each)
+                    a = Answer(submission=submission, question=q, choice=choice)
+                    a.save()
+                    submission_str += choice.text_value+"\n"
+            except:
+                submission_str += "-\n"
         elif q.input_type == q.TEXT:
-            text = request.POST[str(q.id)]
-            a = Answer(submission=submission, question=q, text=text)
-            a.save()
+            try:
+                text = request.POST[str(q.id)]
+                a = Answer(submission=submission, question=q, text=text)
+                a.save()
+                submission_str += text+"\n"
+            except:
+                submission_str += "-\n"
 
-    print(request.POST)
+        submission_str += "\n"
+
+    print(submission_str)
+    email_subject = "New submission: " + survey.name
     
     #TODO: Nice string to send in email
 
     #send_mail(
-    #    'subject here',
-    #    'message',
+    #    email_subject,
+    #    submission_str,
     #    'mujdasaood@gmail.com',
     #    ['mujdasaood@gmail.com'],
     #    fail_silently=False,

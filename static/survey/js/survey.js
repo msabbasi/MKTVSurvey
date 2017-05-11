@@ -18,12 +18,83 @@ function toggle(id) {
     }
 }
 
-$(function(){
-  $('input[type="radio"]').click(function(){
-    if ($(this).is(':checked'))
-    {
-      alert($(this).val());
-    }
-  });
+/*
+$(document).ready(function () {
+    console.log('hi');
+    $('#survey-form *').filter('.wrap-survey-question').each(function () {
+        console.log('hi');
+        question = $(this)
+        if (question.find('.question-required').length) {
+            console.log('yo');
+            var text = question.find(':input:first').attr('required', true);
+            var text = question.find(':input:first').attr('autofocus', true);
+            question.find('.reveal-if-active').attr('required', false);
+            console.log(text);
+        }
+    });
 });
+*/
+
+$(document).on("click", ".wrap-radio", function (event) {
+    var option = $(this)
+    if (option.hasClass('checked')) {
+    } else {
+        console.log('added');
+        var grandparent = option.parent().parent();
+        grandparent.find('.wrap-radio').removeClass('checked');
+        grandparent.find('.reveal-if-active').hide();
+        grandparent.find('.reveal-if-active').attr('required', false);
+        option.addClass('checked');
+        var parent = option.parent();
+        parent.find('.reveal-if-active').show();
+        parent.find('.reveal-if-active').attr('required', true);
+        var text = option.find('input[type="radio"]').trigger("click");
+        console.log(text);
+
+    }
+});
+
+$(document).on("click", ".wrap-checkbox", function (event) {
+    var option = $(this)
+    //
+    if (option.hasClass('checked')) {
+        option.removeClass('checked');
+        var text = option.find('input[type="checkbox"]').prop('checked', false);
+
+    } else {
+        option.addClass('checked');
+        var text = option.find('input[type="checkbox"]').prop('checked', true);
+
+    }
+    console.log(text);
+});
+
+//$( "#survey-form" ).validate({
+//  rules: {
+//    fruit: {
+//      required: true
+//    }
+//  }
+//});
+
+//$('.btn-survey-submit').onClick(function(e) {
 //
+//})
+
+$(document).on("click", ".btn-survey-submit", function (evt) {
+    console.log('heyyy');
+
+    $('#survey-form *').filter('.wrap-survey-question').each(function () {
+        console.log('hi');
+        question = $(this)
+        if (question.find('.question-required').length) {
+            if (question.find('.wrap-multiple-options').length) {
+                if (question.find('input:checked').length < 1) {
+                    $('html, body').animate({ scrollTop: question.offset().top }, 'slow');
+                    //question.css('outline', 'none !important').attr("tabindex",-1).focus();
+                    evt.preventDefault();
+                }
+            }
+        }
+    });
+});

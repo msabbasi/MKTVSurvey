@@ -135,7 +135,7 @@
   margin-top: -40px;
 }
 
-
+/* wrap form */
 .wrap-form {
   font-family: 'gooddog_plainregular';
 }
@@ -276,11 +276,11 @@
 .wrap-form.purple,
 .wrap-form.aqua {
   margin: 45px 0 0 0;
-  padding: 50px 60px 45px 45px;
+  padding: 50px 60px 70px 45px;
 }
 .wrap-form.purple:last-child,
 .wrap-form.aqua:last-child {
-  margin-bottom: 0;
+  margin-bottom: 50px;
 }
 .wrap-form.purple .form-grp.btn-grp,
 .wrap-form.aqua .form-grp.btn-grp {
@@ -297,46 +297,93 @@
   max-width: 120px;
 }
 
-
+/* wrap survey question */
 .wrap-survey-question {
-  padding: 15px 0 0 0;
+  padding: 50px 0 0 0;
 }
 .wrap-survey-question p {
   color: white;
   font-size: 24px;
+  display: inline-block;
+}
+.question-required {
+  color: red !important;
+  display: inline-block;
+}
+.wrap-survey-question > label {
+  color: white;
+  font-size: 24px;
+}
+
+
+/* slider */
+.wrap-survey-slider {
+  text-align: center;
 }
 
 .slider-value {
-  font-size: 20px;
-  position: absolute;
-  color: white;
+  font-size: 25px;
+  color: orange;
+  width: 100%;
+  line-height: 1px;
 }
 
 
 
-
-
-
-
-
-
-
-
-
-.wrap-checkbox > input,
-.wrap-radio > input {
-  display: none;
-  width: 0;
-  height: 0;
-  margin: 0;
+/* Radios and checkboxes*/
+.wrap-radio,
+.wrap-checkbox {
+  /* display: inline-block; */
+  max-width: 80%;
+  margin: 15px auto 0;
+  text-align: left;
+  position: relative;
+  -webkit-box-shadow: -8px 6px 0 0 rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: -8px 6px 0 0 rgba(0, 0, 0, 0.2);
+  -o-box-shadow: -8px 6px 0 0 rgba(0, 0, 0, 0.2);
+  box-shadow: -8px 6px 0 0 rgba(0, 0, 0, 0.2);
+  background: #bbbdc0;
+  font-size: 28px;
+  line-height: 28px;
+  padding: 10px 15px;
+  -webkit-border-radius: 10px;
+  -khtml-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  border-radius: 10px;
+  /*behavior: url(border-radius.htc);*/
+  color: #fff;
+  text-decoration: none;
+  font-weight: normal;
+  cursor: pointer;
 }
-.wrap-checkbox > .label,
-.wrap-radio > .label {
-  margin-left: 8px;
-  font: normal 24px 'gooddog_plainregular';
-  color: #444141;
-  padding-left: 0;
+
+.wrap-radio:before {
+  content: 'o';
+  left: 20px;
+  top: 50%;
+  margin-top: -17px;
+  margin-right: 10px;
+  color: #fff;
+  font-size: 34px;
+  line-height: 34px;
 }
+.wrap-radio.checked:before {
+  content: '';
+  background-color: transparent;
+  background-repeat: no-repeat;
+  display: inline-block;
+  vertical-align: middle;
+  background-image: url(../img/sprite.png);
+  background-position: -1212px -709px;
+  width: 19px;
+  height: 25px;
+  left: 15px;
+}
+
+
+
 .wrap-checkbox > .label {
   position: relative;
 }
@@ -346,10 +393,10 @@
   width: 26px;
   height: 26px;
   background-color: transparent;
-  border: solid 1px #444141;
+  border: solid 1px white;
   margin-top: 4px;
 }
-.wrap-checkbox > .label:after {
+.wrap-checkbox.checked > .label:after {
   content: '';
   position: absolute;
   left: -30px;
@@ -364,8 +411,37 @@
   height: 32px;
   -moz-opacity: 0;
   -khtml-opacity: 0;
-  opacity: 0;
+  opacity: 1;
 }
+
+.wrap-checkbox.checked,
+.wrap-radio.checked {
+  background: orange;
+}
+
+
+.wrap-checkbox span,
+.wrap-radio span {
+  font-size: 28px;
+  line-height: 28px;
+  font-weight: normal;
+}
+
+
+.wrap-checkbox input[type=checkbox],
+.wrap-radio input[type=radio] {
+  display: none;
+  width: 0;
+  height: 0;
+  margin: 0;
+}
+
+
+/*
+
+
+
+
 .wrap-checkbox > .label + .wrap-checkbox {
   margin-top: 8px;
 }
@@ -402,6 +478,7 @@
   word-spacing: 2px;
   text-align: left;
   overflow: hidden;
+  color: white;
   background: url(../img/radio.png) 9% center no-repeat #b6b6b6;
   background-size: 8%;
   cursor: pointer;
@@ -412,9 +489,9 @@
 }
 
 
+*/
 
-
-
+/* Dropdown */
 .dropdown-select {
   display: table;
   width: 100%;
@@ -485,8 +562,8 @@
 }
 .wrap-dropdown-select label {
   position: absolute;
-  left: 17px;
-  top: 10px;
+  /* left: 17px; */
+  /* top: 10px; */
   color: #fff;
   font-family: 'gooddog_plainregular';
   font-size: 20px;
@@ -531,12 +608,14 @@
   font-weight: normal;
 }
 
-
-
+/* Submit button */
+.wrap-btn-submit:last-child {
+  margin-bottom:100px;
+}
 .btn-survey-submit {
-  margin-top: 60px;
+  margin-top: 20px;
   margin-left: 20px;
-  float: left;
+  float: right;
   background: #99bb3c;
   color: #fff;
   border: solid 4px #fff;
@@ -592,3 +671,8 @@
 }
 
 
+/* Other text box */
+.reveal-if-active {
+  display: none;
+  margin-top: 20px;
+}

@@ -11,10 +11,10 @@
     <link rel="stylesheet" href="{% static 'survey/css/style.css' %}">
     
 
-    <script type="text/javascript" src="{% static 'survey/js/jquery-2.0.3.min.js' %}"></script>    
-    <script type="text/javascript" src="{% static 'survey/js/survey.js' %}"></script>
+    <script type="text/javascript" src="{% static 'survey/js/jquery-2.0.3.min.js' %}"></script> 
     <script src="{% static 'survey/js/jquery.icheck.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>   
+    <script type="text/javascript" src="{% static 'survey/js/survey.js' %}"></script>
 </head>
 
 <body>
@@ -26,7 +26,7 @@
 
             {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-            <form action="{% url 'survey:submit' %}" method="post">
+            <form id= "survey-form" action="{% url 'survey:submit' %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="survey_id" value="{{ survey.id }}">
                 <input type="hidden" name="username" value="{{ username }}">
@@ -34,50 +34,71 @@
                 
                 <div class="wrap-form purple light-form">
                 
-                <div class="title">{{ survey.description }}</div>
-                
-                {% for question in survey.questions %}
-                    <div class="wrap-survey-question">
+                    <div class="title">{{ survey.description }}</div>
                     
-                    <p>{{ question.text }}</p>
-                    
-                    
-                    {% if question.input_type == question.SLIDER %}
-                            <span id="slider-{{ question.id }}-value"></span>
-                            <input type="range" id="slider-{{ question.id }}" name="{{ question.id }}" min="{{ question.min_value }}" max="{{ question.max_value }}" step="1" value="" onchange="showSliderValue(this.value, this.id+'-value')" />
-                            
-                    {% elif question.input_type == question.DROPDOWN %}
-                    {% comment %}
-                        <div class="wrap-dropdown-select">
-                            <div class="btn-group dropdown-group dropdown-select">
-                    {% endcomment %}
-                                <select name="{{ question.id }}">
-                                {% for choice in question.choices %}
-                                    <option value="{{ choice.id }}">{{ choice.text_value }}</option>
-                                {% endfor %}
-                                </select>
-                        
-                    {% else %}
-                            {% for choice in question.choices %}
-                                {% if choice.choice_type == choice.NORMAL %}
-                                    <input type="{{question.get_input_type_display}}" name="{{ question.id }}" id="question{{ forloop.parentloop.counter }}choice{{ choice.id }}" value="{{ choice.id }}" />
-                                    <label for="choice{{ forloop.counter }}">{{ choice.text_value }}</label><br />
+                    {% for question in survey.questions %}
+                        <div class="wrap-survey-question">
+                            <div class="wrap-question-text">
+                                <p>{{ question.text }}</p>
+                                {% if question.required %}
+                                    <p class="question-required"> (required)</p>
                                 {% endif %}
-                            {% endfor %}
-                    {% endif %}
-                    
+                            </div>
+                            
+                            {% if question.input_type == question.SLIDER %}
+                                <div class="wrap-survey-slider">
+                                    <div class="slider-value" id="slider-{{ question.id }}-value">Slide to choose</div>
+                                    <input class="survey-slider" type="range" id="slider-{{ question.id }}" name="{{ question.id }}" min="{{ question.min_value }}" max="{{ question.max_value }}" step="1" value="" oninput="showSliderValue(this.value, this.id+'-value')"/>
+                                </div>
+                                    
+                            {% elif question.input_type == question.DROPDOWN %}
+                                <div class="wrap-dropdown-select">
+                                    <div class="btn-group dropdown-group dropdown-select">
+                                        <select name="{{ question.id }}">
+                                        {% for choice in question.choices %}
+                                            <option value="{{ choice.id }}">{{ choice.text_value }}</option>
+                                        {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            
+
+                                
+                            {% elif question.input_type == question.RADIO or question.input_type == question.CHECKBOX %}
+                                <div class="wrap-multiple-options">
+                                    {% for choice in question.choices %}
+                                        <div>
+                                            <label class="wrap-{{question.get_input_type_display}}" for="choice{{ forloop.counter }}">
+                                                <input type="{{question.get_input_type_display}}" name="{{ question.id }}" id="question{{ forloop.parentloop.counter }}choice{{ choice.id }}" value="{{ choice.id }}" />
+                                                <span class="label">{{ choice.text_value }}</span>
+                                            </label>
+                                            {% if choice.choice_type == choice.OTHER and question.input_type == question.RADIO %}
+                                                <input class="reveal-if-active" type="text" name="{{ question.id }}-other" id="{{ question.id }}-other" placeholder="Please specify"/> 
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                
+                                
+                                
+                                
+                            {% elif question.input_type == question.TEXT %}
+                                <input type="text" name="{{ question.id }}" id="{{ question.id }}" placeholder="Your answer here"/>
+                            {% endif %}
+                        
+                        </div>
+                    {% endfor %}
+                
+                    <div class="wrap-btn-submit">
+                        <button type="submit" class="btn btn-survey-submit">Submit</button>
                     </div>
-                {% endfor %}
                 
                 </div>
                 
-                <div class="wrap-btn-submit">
-                    <button type="submit" class="btn btn-survey-submit">Submit</button>
-                </div>
+
+                
             </form>
-            
         </div>
     </section>
-
 </body>
 

@@ -103,6 +103,7 @@ class Answer(models.Model):
     choice = models.ForeignKey(Choice, on_delete=models.PROTECT, null=True)
     text = models.CharField(max_length=200, null=True, blank=True)
     other_text = models.CharField(max_length=200, null=True, blank=True)
-    range_value = models.IntegerField(default=0)
+    range_value = models.IntegerField(null=True, blank=True)
 
     #TODO: custom constraints
+    ##TODO: input max length
