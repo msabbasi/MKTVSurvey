@@ -50,7 +50,7 @@ def survey_form(request, survey_id):
     if request.method == 'POST':
         username = request.POST.get('usertoken')
         if username == None:
-            raise SuspiciousOperation("400 Bad Request")
+            raise Http404("Page not found")
 
         try:
             submission = get_object_or_404(Submission, pk=username)
@@ -132,7 +132,7 @@ def survey_form(request, survey_id):
     elif request.method == 'GET':
         username = request.GET.get('usertoken')
         if username == None:
-            raise SuspiciousOperation("400 Bad Request")
+            raise Http404("Page not found")
         
         try:
             submission = get_object_or_404(Submission, pk=username)
