@@ -33,12 +33,15 @@ def generate(request, survey_id):
         except:
             raise Http404("Sorry, this survey does not exist")
         new_submission = Submission(survey=survey)
+        username = request.GET.get('username')
+        if username:
+            new_submission.username = username
 
         new_submission.save()
 
         return HttpResponseRedirect(reverse('survey:survey_form', kwargs={'survey_id': str(survey.id)}) + "?usertoken=" + str(new_submission.id))
     else:
-        raise SuspiciousOperation("404 Bad Request")
+        raise SuspiciousOperation("400 Bad Request")
 
 def survey_form(request, survey_id):
 
@@ -60,7 +63,12 @@ def survey_form(request, survey_id):
         if (submission.sub_date != None):
             raise PermissionDenied("This survey has already been filled out")
 
-        submission_str = ""
+        submission_str = "usertoken: "+ str(submission)+"\n"
+        submission_str += "username: "
+        if submission.username:
+            submission_str += submission.username+"\n\n"
+        else:
+            submission_str += "not provided\n\n"
 
         questions = survey.questions
         for q in questions:
@@ -115,7 +123,6 @@ def survey_form(request, survey_id):
         
         submission.sub_date = timezone.now()
         submission.save()
-        print(submission_str)
         email_subject = "New submission: " + survey.name
         
 
