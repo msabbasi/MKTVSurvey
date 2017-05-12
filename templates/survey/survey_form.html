@@ -25,6 +25,9 @@
                 <span>{{ survey.page_title }}</span>
             </div>
 
+            <img src="{{ MEDIA_URL }}{{ survey.header_image }}" />
+            
+
             {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
             <form id= "survey-form" method="post">

@@ -18,9 +18,11 @@
 .wrap-survey {
   background: #49c2c5;
   padding: 20px 0 105px 0;
+  min-width: 300px;
 }
 .wrap-survey .title-block {
-  margin-bottom: 45px;
+  margin-bottom: 20px;
+  display: inline-block;
 }
 .wrap-survey .btn-update {
   position: absolute;
@@ -115,6 +117,7 @@
 }
 .title-block.green > span {
   color: #9abc3d;
+  vertical-align: center;
 }
 .title-block.green.with-hand:before {
   width: 208px;
@@ -134,6 +137,13 @@
 .title + .wrap-survey-question {
   margin-top: -40px;
 }
+.wrap-survey .title-block + img {
+  padding-left: 10%;
+  display: inline-block;
+  max-height: 200px;
+  text-align: center;
+}
+
 
 /* wrap form */
 .wrap-form {
@@ -240,9 +250,6 @@
 }
 .wrap-form.purple .icheckbox.checked:after {
   margin-top: -24px;
-}
-.wrap-form.purple .title {
-  color: #49c2c5;
 }
 .wrap-form.purple label {
   font-weight: normal;

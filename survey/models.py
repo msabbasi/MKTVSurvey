@@ -11,7 +11,7 @@ from uuid import uuid4
 class Survey(models.Model):
     name = models.CharField(max_length=50, unique=True)
     #TODO: Custom header image
-    #header_image_url = 
+    header_image = models.ImageField(upload_to = 'header_images/', blank=True, null=True)
     page_title = models.CharField(max_length=50)
     description = models.CharField(max_length=200)
 
@@ -25,7 +25,7 @@ class Survey(models.Model):
 class Submission(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     survey = models.ForeignKey(Survey, on_delete=models.SET_NULL, null=True)
-    username = models.CharField(max_length=50, null=True)
+    username = models.CharField(max_length=50, blank= True, null=True)
     sub_date = models.DateTimeField('date submitted', null=True)
 
     def __str__(self):
