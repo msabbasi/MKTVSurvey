@@ -2,10 +2,15 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render, get_object_or_404, render_to_response
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, Http404
+from django.core.exceptions import PermissionDenied, SuspiciousOperation
 from django.core.urlresolvers import reverse
 from django.template import loader, RequestContext
 from django.core.mail import send_mail
+from django.conf.urls import (
+handler400, handler403, handler404, handler500
+)
+from django.utils import timezone
 
 from .models import Survey, Question, ChoiceGroup, Answer, Submission
 
@@ -13,15 +18,11 @@ from .models import Survey, Question, ChoiceGroup, Answer, Submission
 
 
 # HTTP Error 404
-def page_not_found(request):
-    response = render_to_response(
-    'submit.html',
-    context_instance=RequestContext(request)
-    )
+def handler404(request):
+    print("waaaat")
+    context = Context({'message': 'All: %s' % request,})
 
-    response.status_code = 404
-
-    return response
+    return render(request, 'submit.html', context, context_instance=RequestContext(request), status= 404)
 
 def submit(request):
 
@@ -30,23 +31,42 @@ def submit(request):
     }
     return render(request, 'survey/submit.html', context)
 
-
-def survey_form(request, survey_id):
-    if request.method == 'POST':
+def generate(request, survey_id):
+    if request.method == 'GET':
         try:
-            username = request.POST.get('username')
-            survey_id = request.POST.get('survey_id')
             survey = get_object_or_404(Survey, pk=survey_id)
         except:
-            context = {
-                'message': 'Survey not found!',
-            }
-            return render(request, 'survey/submit.html', context)
+            raise Http404("Sorry, this survey does not exist")
+        new_submission = Submission(survey=survey)
 
-        submission = Submission(
-                    survey = survey,
-                    username = username)
-        submission.save()
+        new_submission.save()
+
+        return HttpResponseRedirect(reverse('survey:survey_form', kwargs={'survey_id': str(survey.id)}) + "?usertoken=" + str(new_submission.id))
+    else:
+        #badrequest
+        raise Http404("Bad request")
+
+def survey_form(request, survey_id):
+
+    try:
+        survey = get_object_or_404(Survey, pk=survey_id)
+    except:
+        raise Http404("Sorry, this survey does not exist")
+        #return HttpResponseNotFound('<h1>Survey not found</h1>')
+        #return render(request, 'survey/submit.html', context)
+
+    if request.method == 'POST':
+        username = request.POST.get('usertoken')
+        if username == None:
+            raise SuspiciousOperation("400 Bad Request")
+
+        try:
+            submission = get_object_or_404(Submission, pk=username)
+        except:
+            raise PermissionDenied("Sorry, you don't have access to this survey")
+
+        if (submission.sub_date != None):
+            raise PermissionDenied("This survey has already been filled out")
 
         submission_str = ""
 
@@ -100,36 +120,37 @@ def survey_form(request, survey_id):
                     submission_str += "-\n"
 
             submission_str += "\n"
-
+        
+        submission.sub_date = timezone.now()
+        submission.save()
         print(submission_str)
         email_subject = "New submission: " + survey.name
         
-        #TODO: Nice string to send in email
 
-        #send_mail(
-        #    email_subject,
-        #    submission_str,
-        #    'mujdasaood@gmail.com',
-        #    ['mujdasaood@gmail.com'],
-        #    fail_silently=False,
-        #)
+        send_mail(
+            email_subject,
+            submission_str,
+            'mujdasaood@gmail.com',
+            ['mujdasaood@gmail.com'],
+            fail_silently=False,
+        )
 
-        context = {
-            'message': 'Thank you for your input!',
-        }
+        return HttpResponseRedirect(reverse('survey:submit')+'?usertoken='+str(submission.id))
 
-        return HttpResponseRedirect(reverse('survey:submit'))
     elif request.method == 'GET':
-        survey = get_object_or_404(Survey, pk=survey_id)
+        username = request.GET.get('usertoken')
+        if username == None:
+            raise SuspiciousOperation("400 Bad Request")
+        
         try:
-            username = request.GET.get('username', '')
+            submission = get_object_or_404(Submission, pk=username)
         except:
-            context = {
-                'message': 'Survey not found!',
-            }
-            return render(request, 'survey/submit.html', context)
+            raise PermissionDenied("Sorry, you don't have access to this survey")
 
-    return render(request, 'survey/survey_form.html', {'survey': survey, 'username': username})
+        if (submission.sub_date != None):
+            raise PermissionDenied("This survey has already been filled out")
+
+    return render(request, 'survey/survey_form.html', {'survey': survey, 'usertoken': username})
 
 
 

@@ -12,6 +12,7 @@
     
 
     <script type="text/javascript" src="{% static 'survey/js/jquery-2.0.3.min.js' %}"></script> 
+    <script type="text/javascript" src="{% static 'survey/js/jquery-ui.min.js' %}"></script> 
     <script src="{% static 'survey/js/jquery.icheck.js' %}"></script>
     <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>   
     <script type="text/javascript" src="{% static 'survey/js/survey.js' %}"></script>
@@ -29,7 +30,7 @@
             <form id= "survey-form" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="survey_id" value="{{ survey.id }}">
-                <input type="hidden" name="username" value="{{ username }}">
+                <input type="hidden" name="usertoken" value="{{ usertoken }}">
                 
                 
                 <div class="wrap-form purple light-form">
@@ -47,8 +48,8 @@
                             
                             {% if question.input_type == question.SLIDER %}
                                 <div class="wrap-survey-slider">
-                                    <div class="slider-value" id="slider-{{ question.id }}-value"></div>
-                                    <input class="survey-slider" type="range" id="slider-{{ question.id }}" name="{{ question.id }}" min="{{ question.min_value }}" max="{{ question.max_value }}" step="1" value="" oninput="showSliderValue(this.value, this.id+'-value')"/>
+                                    <div class="slider-value" id="slider-{{ question.id }}-value">{{ question.min_value }}</div>
+                                    <input class="survey-slider" type="range" id="slider-{{ question.id }}" name="{{ question.id }}" min="{{ question.min_value }}" max="{{ question.max_value }}" step="1" value="{{ question.min_value }}" oninput="showSliderValue(this.value, this.id+'-value')"/>
                                 </div>
                                     
                             {% elif question.input_type == question.DROPDOWN %}

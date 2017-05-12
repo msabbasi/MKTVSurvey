@@ -310,8 +310,9 @@
   display: inline-block;
 }
 .question-required {
-  color: red !important;
+  color: orangered !important;
   display: inline-block;
+  line-height: 1px;
 }
 .wrap-survey-question > label {
   color: white;
@@ -351,14 +352,14 @@
 
 /* slider */
 .wrap-survey-slider {
-  text-align: center;
+  /* text-align: center;*/
 }
 
 .slider-value {
   font-size: 30px;
   color: orange;
   width: 100%;
-  line-height: 1px;
+  line-height: 3px;
 }
 
 

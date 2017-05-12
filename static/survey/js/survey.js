@@ -18,22 +18,6 @@ function toggle(id) {
     }
 }
 
-/*
-$(document).ready(function () {
-    console.log('hi');
-    $('#survey-form *').filter('.wrap-survey-question').each(function () {
-        console.log('hi');
-        question = $(this)
-        if (question.find('.question-required').length) {
-            console.log('yo');
-            var text = question.find(':input:first').attr('required', true);
-            var text = question.find(':input:first').attr('autofocus', true);
-            question.find('.reveal-if-active').attr('required', false);
-            console.log(text);
-        }
-    });
-});
-*/
 
 $(document).on("click", ".wrap-radio", function (event) {
     var option = $(this)
@@ -69,17 +53,6 @@ $(document).on("click", ".wrap-checkbox", function (event) {
     console.log(text);
 });
 
-//$( "#survey-form" ).validate({
-//  rules: {
-//    fruit: {
-//      required: true
-//    }
-//  }
-//});
-
-//$('.btn-survey-submit').onClick(function(e) {
-//
-//})
 
 $(document).on("click", ".btn-survey-submit", function (evt) {
     console.log('heyyy');
@@ -92,9 +65,9 @@ $(document).on("click", ".btn-survey-submit", function (evt) {
                 if (question.find('input:checked').length < 1) {
                     evt.preventDefault();
                     $('html, body').animate({ scrollTop: question.offset().top }, 'slow');
-                    question.find('.question-required').delay(1000).hide(0).delay(500).show(0).delay(500).hide(0).delay(500).show(0);
-                    //question.addClass('blink').delay(2000).removeClass('blink');
-                    //question.effect("highlight", {}, 3000);
+                    //question.find('.question-required').delay(1000).hide(0).delay(500).show(0).delay(500).hide(0).delay(500).show(0);
+                    //question.delay(2000).addClass('blink').delay(2000).removeClass('blink');
+                    question.find('.wrap-question-text').effect("highlight", {color:"#ef7373"}, 3000);
                     //var originalBg = $(this).css("backgroundColor");
                     //question.stop().css("background-color", "#FFFF9C").animate({ backgroundColor: originalBg}, 1500);
                     //question.css('outline', 'none !important').attr("tabindex",-1).focus();

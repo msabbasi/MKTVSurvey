@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from uuid import uuid4
 
 # Create your models here.
 
@@ -22,12 +23,13 @@ class Survey(models.Model):
         return self.name
 
 class Submission(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     survey = models.ForeignKey(Survey, on_delete=models.SET_NULL, null=True)
-    username = models.CharField(max_length=50)
-    sub_date = models.DateTimeField('date submitted', default=timezone.now)
+    username = models.CharField(max_length=50, null=True)
+    sub_date = models.DateTimeField('date submitted', null=True)
 
     def __str__(self):
-        return self.username
+        return str(self.id)
 
 class ChoiceGroup(models.Model):
     name = models.CharField(max_length=50, unique=True)
