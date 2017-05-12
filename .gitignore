@@ -2,6 +2,7 @@
 *~
 __pycache__
 mktvSurveyEnv
+mktvSurvey/secret_settings.py
 
 
 # Byte-compiled / optimized / DLL files
