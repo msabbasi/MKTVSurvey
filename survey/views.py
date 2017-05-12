@@ -16,14 +16,6 @@ from .models import Survey, Question, ChoiceGroup, Answer, Submission
 
 # Create your views here.
 
-
-# HTTP Error 404
-def handler404(request):
-    print("waaaat")
-    context = Context({'message': 'All: %s' % request,})
-
-    return render(request, 'submit.html', context, context_instance=RequestContext(request), status= 404)
-
 def submit(request):
 
     context = {
@@ -31,6 +23,9 @@ def submit(request):
     }
     return render(request, 'survey/submit.html', context)
 
+# Temporary implementation to obtain survey url
+# Depending on how it needs to be interfaced with the website
+# this implementation will be changed
 def generate(request, survey_id):
     if request.method == 'GET':
         try:
@@ -43,8 +38,7 @@ def generate(request, survey_id):
 
         return HttpResponseRedirect(reverse('survey:survey_form', kwargs={'survey_id': str(survey.id)}) + "?usertoken=" + str(new_submission.id))
     else:
-        #badrequest
-        raise Http404("Bad request")
+        raise SuspiciousOperation("404 Bad Request")
 
 def survey_form(request, survey_id):
 
@@ -52,8 +46,6 @@ def survey_form(request, survey_id):
         survey = get_object_or_404(Survey, pk=survey_id)
     except:
         raise Http404("Sorry, this survey does not exist")
-        #return HttpResponseNotFound('<h1>Survey not found</h1>')
-        #return render(request, 'survey/submit.html', context)
 
     if request.method == 'POST':
         username = request.POST.get('usertoken')
